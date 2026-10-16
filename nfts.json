@@ -1,0 +1,203 @@
+[
+  {
+    "id": "genesis-001",
+    "title": "Cyber Samurai 2099 #042",
+    "creator": "0xNeoViper...7F81",
+    "owner": "0xNeoViper...7F81",
+    "price": 3.45,
+    "highestBid": 3.45,
+    "bidder": "0xKage...8821",
+    "category": "cyberpunk",
+    "rarity": "Mythic",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+    "description": "Forged in the neon gutters of Neo-Shibuya, a legendary robotic ronin infused with quantum synthetic soul cores.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 2.1,
+        "from": "0xGenesis",
+        "to": "0xNeoViper...7F81",
+        "date": "2 days ago"
+      },
+      {
+        "event": "Bid Placed",
+        "price": 3.45,
+        "from": "0xKage...8821",
+        "to": "Escrow",
+        "date": "1 hour ago"
+      }
+    ],
+    "views": 1420,
+    "likes": 384,
+    "tags": [
+      "Cyberpunk",
+      "Katana",
+      "Synthetic",
+      "Mythic"
+    ]
+  },
+  {
+    "id": "genesis-002",
+    "title": "Celestial Oracle: Nebula-X",
+    "creator": "0xStarGazer...339A",
+    "owner": "0xStarGazer...339A",
+    "price": 5.8,
+    "highestBid": 5.8,
+    "bidder": "0xApexWhale...99B4",
+    "category": "space",
+    "rarity": "Legendary",
+    "image": "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&auto=format&fit=crop&q=80",
+    "description": "Multidimensional divine entity channeling deep cosmic radio bursts across distant spiral galaxies.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 4.5,
+        "from": "0xGenesis",
+        "to": "0xStarGazer...339A",
+        "date": "3 days ago"
+      },
+      {
+        "event": "Bid Placed",
+        "price": 5.8,
+        "from": "0xApexWhale...99B4",
+        "to": "Escrow",
+        "date": "4 hours ago"
+      }
+    ],
+    "views": 2890,
+    "likes": 812,
+    "tags": [
+      "Space",
+      "Cosmic",
+      "Astral",
+      "Legendary"
+    ]
+  },
+  {
+    "id": "genesis-003",
+    "title": "Ethereal Chroma Prism #11",
+    "creator": "0xPrismWorks...5A22",
+    "owner": "0xPrismWorks...5A22",
+    "price": 1.75,
+    "highestBid": 1.75,
+    "bidder": "0xVelvet...41C0",
+    "category": "abstract",
+    "rarity": "Epic",
+    "image": "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=800&auto=format&fit=crop&q=80",
+    "description": "Liquid iridescent glass simulation generating holographic light refraction patterns.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 1.2,
+        "from": "0xGenesis",
+        "to": "0xPrismWorks...5A22",
+        "date": "1 day ago"
+      }
+    ],
+    "views": 940,
+    "likes": 215,
+    "tags": [
+      "3D",
+      "Abstract",
+      "Chroma",
+      "Glass"
+    ]
+  },
+  {
+    "id": "genesis-004",
+    "title": "Mecha Titan: Dreadnought 07",
+    "creator": "0xIronHeart...9D11",
+    "owner": "0xIronHeart...9D11",
+    "price": 8.2,
+    "highestBid": 8.2,
+    "bidder": "0xTitanCollector...00A3",
+    "category": "cyberpunk",
+    "rarity": "Mythic",
+    "image": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80",
+    "description": "Heavy orbital combat exo-frame equipped with plasma cannons and self-repairing nanite shields.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 6,
+        "from": "0xGenesis",
+        "to": "0xIronHeart...9D11",
+        "date": "5 days ago"
+      },
+      {
+        "event": "Bid Placed",
+        "price": 8.2,
+        "from": "0xTitanCollector...00A3",
+        "to": "Escrow",
+        "date": "20 mins ago"
+      }
+    ],
+    "views": 4120,
+    "likes": 1205,
+    "tags": [
+      "Mecha",
+      "Sci-Fi",
+      "Armor",
+      "Heavy"
+    ]
+  },
+  {
+    "id": "genesis-005",
+    "title": "Solar Flare Deity #09",
+    "creator": "0xSolKeeper...7B44",
+    "owner": "0xSolKeeper...7B44",
+    "price": 2.95,
+    "highestBid": 2.95,
+    "bidder": "0xHelios...313F",
+    "category": "anime",
+    "rarity": "Epic",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+    "description": "Incarnation of stellar solar energy with golden corona wings and celestial flame aura.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 2,
+        "from": "0xGenesis",
+        "to": "0xSolKeeper...7B44",
+        "date": "12 hours ago"
+      }
+    ],
+    "views": 1105,
+    "likes": 340,
+    "tags": [
+      "Solar",
+      "Fire",
+      "Gold",
+      "Anime"
+    ]
+  },
+  {
+    "id": "genesis-006",
+    "title": "Quantum Glitch Matrix #303",
+    "creator": "0xZeroDay...1337",
+    "owner": "0xZeroDay...1337",
+    "price": 4.1,
+    "highestBid": 4.1,
+    "bidder": "0xBinaryGhost...2222",
+    "category": "abstract",
+    "rarity": "Legendary",
+    "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&auto=format&fit=crop&q=80",
+    "description": "An encrypted anomaly that escaped the decentralized memory blocks of the mainnet.",
+    "history": [
+      {
+        "event": "Minted",
+        "price": 3,
+        "from": "0xGenesis",
+        "to": "0xZeroDay...1337",
+        "date": "4 days ago"
+      }
+    ],
+    "views": 2240,
+    "likes": 677,
+    "tags": [
+      "Glitch",
+      "Matrix",
+      "Hacker",
+      "Vaporwave"
+    ]
+  }
+]
