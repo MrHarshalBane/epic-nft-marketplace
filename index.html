@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA — Next-Gen Decentralized NFT Marketplace</title>
+  <meta name="description" content="Discover, collect, bid, and trade rare digital art and gaming NFTs across Ethereum and Polygon with zero gas slippage." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            auraDark: '#080a10',
+            auraCard: '#111522',
+            auraCardHover: '#181e30',
+            auraBorder: 'rgba(255, 255, 255, 0.08)',
+            auraPurple: '#8b5cf6',
+            auraCyan: '#06b6d4',
+            auraGreen: '#10b981',
+            auraPink: '#ec4899',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #080a10;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glass-card {
+      background: rgba(17, 21, 34, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+    .glow-effect {
+      box-shadow: 0 0 30px -10px rgba(139, 92, 246, 0.4);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-purple-600 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-card border-b border-auraBorder">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-purple-500/20">
+          <i data-lucide="gem" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <span class="text-2xl font-black tracking-tight text-white flex items-center gap-1">AURA <span class="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-mono">v2.4</span></span>
+          <span class="text-xs text-gray-400 font-medium tracking-wider uppercase block">NFT Marketplace</span>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="hidden md:flex flex-1 max-w-md mx-8">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+          <input type="text" id="searchInput" placeholder="Search by collectible, creator, or tags..." class="w-full bg-auraCard/90 border border-auraBorder focus:border-purple-500 rounded-xl pl-11 pr-4 py-2.5 text-sm text-gray-200 placeholder-gray-500 outline-none transition" />
+        </div>
+      </div>
+
+      <!-- Action Nav -->
+      <div class="flex items-center space-x-3">
+        <button onclick="openMintModal()" class="px-4 py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/25 transition flex items-center space-x-2">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Create NFT</span>
+        </button>
+
+        <button id="walletBtn" onclick="toggleWallet()" class="px-4 py-2.5 rounded-xl font-mono text-sm bg-auraCard border border-auraBorder hover:border-purple-500/50 text-gray-200 transition flex items-center space-x-2">
+          <span class="pulse-dot"></span>
+          <span id="walletText">0x742d...f44e</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="relative py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+    <div class="glass-card rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-auraBorder">
+      <!-- Ambient Glow -->
+      <div class="absolute -right-20 -top-20 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold uppercase tracking-wider mb-4">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Curated Genesis Collection
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight mb-4">
+          Discover &amp; Trade <span class="gradient-text">Exceptional Digital Art</span>
+        </h1>
+        <p class="text-gray-400 text-base sm:text-lg mb-8 leading-relaxed">
+          The premier decentralized digital collectibles marketplace. Place live auction bids, instant-buy verified creator drops, or mint your own masterwork onto the blockchain.
+        </p>
+
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-auraBorder">
+          <div>
+            <span class="block text-2xl font-bold font-mono text-white" id="statVolume">142.8 ETH</span>
+            <span class="text-xs text-gray-400 uppercase tracking-wider">Total Volume</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-bold font-mono text-white" id="statListed">8 Drops</span>
+            <span class="text-xs text-gray-400 uppercase tracking-wider">Live Collectibles</span>
+          </div>
+          <div>
+            <span class="block text-2xl font-bold font-mono text-white">0%</span>
+            <span class="text-xs text-gray-400 uppercase tracking-wider">Platform Fee</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Category Bar -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 w-full">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0" id="categoryChips">
+        <button onclick="setCategory('all')" class="cat-chip active px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition bg-purple-600 text-white">All Works</button>
+        <button onclick="setCategory('cyberpunk')" class="cat-chip px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition bg-auraCard text-gray-400 hover:text-white border border-auraBorder">Cyberpunk</button>
+        <button onclick="setCategory('space')" class="cat-chip px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition bg-auraCard text-gray-400 hover:text-white border border-auraBorder">Cosmic</button>
+        <button onclick="setCategory('abstract')" class="cat-chip px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition bg-auraCard text-gray-400 hover:text-white border border-auraBorder">Abstract</button>
+        <button onclick="setCategory('mythic')" class="cat-chip px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition bg-auraCard text-gray-400 hover:text-white border border-auraBorder">Mythology</button>
+      </div>
+
+      <!-- Sorting Select -->
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Sort By:</span>
+        <select id="sortSelect" onchange="renderNFTs()" class="bg-auraCard border border-auraBorder rounded-xl px-3 py-2 text-xs text-gray-200 outline-none focus:border-purple-500">
+          <option value="newest">Latest Minted</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="popular">Most Liked</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main NFT Showcase Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 flex-1 w-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="nftGrid">
+      <!-- Dynamically populated by JS -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-20">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-auraCard flex items-center justify-center text-gray-500">
+        <i data-lucide="package-search" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-bold text-gray-300">No collectibles match your filter</h3>
+      <p class="text-sm text-gray-500 mt-1">Try resetting your search query or selecting a different category.</p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-xl bg-purple-600 text-xs font-semibold text-white">Reset Filters</button>
+    </div>
+  </main>
+
+  <!-- Detail / Bid Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-auraBorder relative p-6 sm:p-8">
+      <button onclick="closeDetailModal()" class="absolute right-5 top-5 text-gray-400 hover:text-white transition">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- NFT Image -->
+        <div class="rounded-2xl overflow-hidden bg-black aspect-square">
+          <img id="modalImage" src="" alt="NFT Preview" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Info & Actions -->
+        <div class="flex flex-col justify-between space-y-4">
+          <div>
+            <span id="modalRarity" class="px-2.5 py-1 rounded-full text-xs font-bold uppercase font-mono bg-purple-500/20 text-purple-300">Mythic</span>
+            <h2 id="modalTitle" class="text-2xl font-bold text-white mt-2 leading-tight">Cyber Samurai</h2>
+            <p id="modalDesc" class="text-xs text-gray-400 mt-2 leading-relaxed">Description goes here.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-auraCard/80 border border-auraBorder space-y-2">
+            <div class="flex justify-between items-center text-xs text-gray-400">
+              <span>Current Highest Bid</span>
+              <span>Direct Buy Price</span>
+            </div>
+            <div class="flex justify-between items-baseline font-mono">
+              <span class="text-2xl font-bold text-cyan-400" id="modalHighestBid">3.45 ETH</span>
+              <span class="text-lg font-bold text-purple-400" id="modalPrice">3.45 ETH</span>
+            </div>
+            <div class="text-[11px] text-gray-500" id="modalOwner">Owned by: 0x...</div>
+          </div>
+
+          <!-- Bid Form -->
+          <div class="space-y-3">
+            <div class="flex gap-2">
+              <input type="number" step="0.05" id="bidInput" placeholder="ETH amount" class="flex-1 bg-auraCard border border-auraBorder rounded-xl px-4 py-2.5 text-sm font-mono text-white outline-none focus:border-cyan-400">
+              <button onclick="submitBid()" class="px-4 py-2.5 rounded-xl font-bold text-sm bg-cyan-500 hover:bg-cyan-400 text-black transition">
+                Place Bid
+              </button>
+            </div>
+            <button onclick="submitBuyNow()" class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/30 transition">
+              Instant Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provenance History -->
+      <div class="mt-8 pt-6 border-t border-auraBorder">
+        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">On-Chain Activity History</h4>
+        <div class="space-y-2" id="modalHistory">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mint NFT Modal -->
+  <div id="mintModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-lg w-full border border-auraBorder relative p-6 sm:p-8">
+      <button onclick="closeMintModal()" class="absolute right-5 top-5 text-gray-400 hover:text-white transition">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+
+      <div class="mb-6">
+        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i> Mint New Collectible
+        </h3>
+        <p class="text-xs text-gray-400 mt-1">Deploy your art asset directly into the AURA Marketplace escrow.</p>
+      </div>
+
+      <form id="mintForm" onsubmit="handleMintSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Item Title</label>
+          <input type="text" id="mintTitle" required placeholder="e.g. Quantum Shinjuku #01" class="w-full bg-auraCard border border-auraBorder rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Image URL (High-Res WebP / JPG / PNG)</label>
+          <input type="url" id="mintImage" required placeholder="https://images.unsplash.com/..." class="w-full bg-auraCard border border-auraBorder rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-purple-500 font-mono text-xs">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Category</label>
+            <select id="mintCategory" class="w-full bg-auraCard border border-auraBorder rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-purple-500">
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="space">Cosmic</option>
+              <option value="abstract">Abstract</option>
+              <option value="mythic">Mythology</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Rarity Tier</label>
+            <select id="mintRarity" class="w-full bg-auraCard border border-auraBorder rounded-xl px-3 py-2.5 text-xs text-white outline-none focus:border-purple-500">
+              <option value="Common">Common</option>
+              <option value="Rare">Rare</option>
+              <option value="Legendary">Legendary</option>
+              <option value="Mythic">Mythic</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Initial Price (ETH)</label>
+          <input type="number" step="0.01" min="0.01" id="mintPrice" required placeholder="1.50" class="w-full bg-auraCard border border-auraBorder rounded-xl px-4 py-2.5 text-sm font-mono text-white outline-none focus:border-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">Description</label>
+          <textarea id="mintDesc" rows="3" placeholder="Explain the lore, inspiration, and rarity mechanics..." class="w-full bg-auraCard border border-auraBorder rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:border-purple-500"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/30 transition">
+          Mint &amp; List Collectible
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 glass-card border border-purple-500/50 rounded-2xl px-5 py-3 shadow-2xl flex items-center space-x-3 transform translate-y-24 opacity-0 transition duration-300 pointer-events-none">
+    <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center">
+      <i data-lucide="check" class="w-4 h-4"></i>
+    </div>
+    <span id="toastMsg" class="text-sm font-semibold text-white">Action completed</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-auraBorder py-8 px-4 text-center text-xs text-gray-500">
+    <p>AURA Decentralized NFT Marketplace • Built by <a href="https://github.com/MrHarshalBane" target="_blank" class="text-purple-400 hover:underline">Harshal Bane</a> • Web3 Ethereum &amp; Polygon Architecture</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
